@@ -129,4 +129,32 @@ const getAllBookHandler = (request, h) => {
     return response;
 };
 
-module.exports = { addBookHandler, getAllBookHandler };
+const getBookByIdHandler = (request, h) => {
+    
+    const { id } = request.params;
+    //jika gagal coba ubah filteredBook jadi book && book : filteredBook" jadi book
+    const filteredBook = book.filter((book) => book.id === id)[0];
+
+    if (filteredBook !== undefined) {
+        const response = h.response({
+          status: 'success',
+          data: {
+            book : filteredBook,
+          },
+        });
+    
+        response.code(200);
+        return response;
+      }
+    
+      const response = h.response({
+        status: 'fail',
+        message: 'Buku tidak ditemukan',
+      });
+    
+      response.code(404);
+      return response;
+
+}
+
+module.exports = { addBookHandler, getAllBookHandler, getBookByIdHandler };
