@@ -9,6 +9,34 @@ const addBookHandler = (request, h) => {
   const updatedAt = insertedAt;
   const finished = (pageCount === readPage);
 
+  if (name === undefined) {
+      /* JSON : 400
+        "status": "fail",
+        "message": "Gagal menambahkan buku. Mohon isi nama buku",
+      */
+    const response = h.response({
+      status: 'fail',
+      message: 'Gagal menambahkan buku. Mohon isi nama buku',
+    });
+    response.code(400);
+
+    return response;
+  }
+
+  if (pageCount < readPage) {
+      /* JSON : 400
+        "status": "fail",
+        "message": "Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount",
+      */
+    const response = h.response({
+      status: 'fail',
+      message: 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount',
+    });
+    response.code(400);
+
+    return response;
+  }
+
   const createBook = {
     id, name, year,
     author, summary, publisher,
@@ -49,6 +77,7 @@ const addBookHandler = (request, h) => {
     status: 'fail',
     message: 'Buku gagal ditambahkan',
   });
+  //ditaruh diluar supaya apapun selain isSuccess == True jadi False meski alasan unknown
   response.code(500);
 
   return response;
